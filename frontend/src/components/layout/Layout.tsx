@@ -1,5 +1,7 @@
 import { NavLink, Outlet } from 'react-router'
 
+import { EstadoApi } from '@/components/layout/EstadoApi.tsx'
+
 const ENLACES = [
   { a: '/calculadora', texto: 'Calculadora' },
   { a: '/ejemplos', texto: 'Ejemplos' },
@@ -41,8 +43,9 @@ export function Layout() {
       </main>
 
       <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-3 text-sm text-slate-500">
-          Método simplex y Dos Fases · Investigación de Operaciones
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm text-slate-500">
+          <span>Método simplex y Dos Fases · Investigación de Operaciones</span>
+          <EstadoApi />
         </div>
       </footer>
     </div>
