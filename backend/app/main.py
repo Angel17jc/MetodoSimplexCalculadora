@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1 import sistema
+from app.api.v1 import resolver, sistema
 from app.core.config import obtener_configuracion
 
 configuracion = obtener_configuracion()
@@ -20,3 +20,4 @@ app.add_middleware(
 )
 
 app.include_router(sistema.router, prefix="/api/v1")
+app.include_router(resolver.router, prefix="/api/v1")
