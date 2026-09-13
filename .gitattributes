@@ -1,0 +1,14 @@
+# Finales de línea LF en el repositorio para todos los sistemas
+* text=auto eol=lf
+
+# Scripts de Windows con CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binarios
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary
+*.woff2 binary
