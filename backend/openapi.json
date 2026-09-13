@@ -1,0 +1,1187 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Simplex Paso a Paso",
+    "description": "API del método simplex (normal y Dos Fases) que explica cada operación.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "sistema"
+        ],
+        "summary": "Estado del servicio",
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api V1 Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resolver": {
+      "post": {
+        "tags": [
+          "simplex"
+        ],
+        "summary": "Resolver un problema paso a paso",
+        "description": "Devuelve todas las operaciones del desarrollo y el resultado. No guarda nada.",
+        "operationId": "resolver_api_v1_resolver_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Problema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaResolver"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Motor pendiente (Sprint 1)"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/importar": {
+      "post": {
+        "tags": [
+          "exportar e importar"
+        ],
+        "summary": "Importar un archivo .simplex.json",
+        "description": "Valida el archivo y vuelve a resolver el problema que contiene.",
+        "operationId": "importar_api_v1_importar_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchivoSimplex"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaResolver"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Pendiente (Sprint 3)"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/exportar/pdf": {
+      "post": {
+        "tags": [
+          "exportar e importar"
+        ],
+        "summary": "Exportar el desarrollo completo a PDF",
+        "operationId": "exportar_pdf_api_v1_exportar_pdf_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Problema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Archivo PDF",
+            "content": {
+              "application/pdf": {}
+            }
+          },
+          "501": {
+            "description": "Pendiente (Sprint 3)"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/problemas": {
+      "post": {
+        "tags": [
+          "problemas guardados"
+        ],
+        "summary": "Guardar un problema y obtener su enlace",
+        "operationId": "guardar_problema_api_v1_problemas_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuardarProblema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaGuardado"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Pendiente (Sprint 3)"
+          },
+          "503": {
+            "description": "No hay base de datos configurada"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/problemas/{slug}": {
+      "get": {
+        "tags": [
+          "problemas guardados"
+        ],
+        "summary": "Abrir un problema guardado",
+        "operationId": "obtener_problema_api_v1_problemas__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaGuardado"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Pendiente (Sprint 3)"
+          },
+          "503": {
+            "description": "No hay base de datos configurada"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ejemplos": {
+      "get": {
+        "tags": [
+          "ejemplos"
+        ],
+        "summary": "Problemas precargados",
+        "operationId": "obtener_ejemplos_api_v1_ejemplos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Ejemplo"
+                  },
+                  "type": "array",
+                  "title": "Response Obtener Ejemplos Api V1 Ejemplos Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ArchivoSimplex": {
+        "properties": {
+          "formato": {
+            "type": "string",
+            "const": "simplex-paso-a-paso",
+            "title": "Formato",
+            "default": "simplex-paso-a-paso"
+          },
+          "version_formato": {
+            "type": "integer",
+            "const": 1,
+            "title": "Version Formato",
+            "default": 1
+          },
+          "titulo": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Titulo",
+            "default": "Problema sin título"
+          },
+          "descripcion": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Descripcion"
+          },
+          "exportado_en": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exportado En"
+          },
+          "problema": {
+            "$ref": "#/components/schemas/Problema"
+          },
+          "solucion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RespuestaResolver"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "problema"
+        ],
+        "title": "ArchivoSimplex",
+        "description": "Contenido de un archivo .simplex.json exportado o de un ejemplo precargado.\n\nAl importar solo se usa `problema`: el backend vuelve a resolver y no confía en `solucion`."
+      },
+      "Clasificacion": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "extendido"
+            ],
+            "title": "Tipo"
+          },
+          "motivo": {
+            "type": "string",
+            "title": "Motivo",
+            "examples": [
+              "Hay restricciones ≥ y =: se usarán Dos Fases"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "tipo",
+          "motivo"
+        ],
+        "title": "Clasificacion"
+      },
+      "Ejemplo": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "examples": [
+              "profesor-max"
+            ]
+          },
+          "titulo": {
+            "type": "string",
+            "title": "Titulo"
+          },
+          "descripcion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Descripcion"
+          },
+          "problema": {
+            "$ref": "#/components/schemas/Problema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "titulo",
+          "problema"
+        ],
+        "title": "Ejemplo"
+      },
+      "Estado": {
+        "type": "string",
+        "enum": [
+          "optimo",
+          "multiples_optimos",
+          "no_acotado",
+          "infactible"
+        ],
+        "title": "Estado"
+      },
+      "GuardarProblema": {
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Titulo",
+            "default": "Problema sin título"
+          },
+          "problema": {
+            "$ref": "#/components/schemas/Problema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "problema"
+        ],
+        "title": "GuardarProblema"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "OperacionFila": {
+        "properties": {
+          "fila": {
+            "type": "string",
+            "title": "Fila"
+          },
+          "latex": {
+            "type": "string",
+            "title": "Latex",
+            "examples": [
+              "R_2' = -20\\,R_3' + R_2"
+            ]
+          },
+          "antes": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "title": "Antes"
+          },
+          "suma": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+                  "examples": [
+                    "3/4",
+                    "-2",
+                    "0.5"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suma",
+            "description": "Término que se suma, por ejemplo −20·R3'"
+          },
+          "despues": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "title": "Despues"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fila",
+          "latex",
+          "antes",
+          "despues"
+        ],
+        "title": "OperacionFila",
+        "description": "Operación de Gauss-Jordan sobre una fila, valor por valor."
+      },
+      "Paso": {
+        "properties": {
+          "indice": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Indice"
+          },
+          "fase": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fase"
+          },
+          "iteracion": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iteracion"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoPaso"
+          },
+          "titulo": {
+            "type": "string",
+            "title": "Titulo"
+          },
+          "texto": {
+            "type": "string",
+            "title": "Texto"
+          },
+          "latex": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latex"
+          },
+          "razones": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/RazonFila"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Razones"
+          },
+          "operacion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OperacionFila"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resaltar": {
+            "$ref": "#/components/schemas/Resaltado"
+          },
+          "tabla": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TablaSimplex"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Cómo queda la tabla después de aplicar el paso"
+          }
+        },
+        "type": "object",
+        "required": [
+          "indice",
+          "tipo",
+          "titulo",
+          "texto"
+        ],
+        "title": "Paso",
+        "description": "Una operación atómica del desarrollo. El puntero del frontend avanza de a uno."
+      },
+      "Problema": {
+        "properties": {
+          "objetivo": {
+            "type": "string",
+            "enum": [
+              "max",
+              "min"
+            ],
+            "title": "Objetivo"
+          },
+          "coef_objetivo": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Coef Objetivo"
+          },
+          "restricciones": {
+            "items": {
+              "$ref": "#/components/schemas/Restriccion"
+            },
+            "type": "array",
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Restricciones"
+          }
+        },
+        "type": "object",
+        "required": [
+          "objetivo",
+          "coef_objetivo",
+          "restricciones"
+        ],
+        "title": "Problema",
+        "description": "Modelo de programación lineal tal como lo escribe el usuario.",
+        "examples": [
+          {
+            "coef_objetivo": [
+              "10",
+              "15"
+            ],
+            "objetivo": "max",
+            "restricciones": [
+              {
+                "coeficientes": [
+                  "1",
+                  ""
+                ],
+                "lado_derecho": "400",
+                "signo": "<="
+              },
+              {
+                "coeficientes": [
+                  "15",
+                  "20"
+                ],
+                "lado_derecho": "500",
+                "signo": ">="
+              },
+              {
+                "coeficientes": [
+                  "",
+                  "8"
+                ],
+                "lado_derecho": "100",
+                "signo": "="
+              }
+            ]
+          }
+        ]
+      },
+      "ProblemaGuardado": {
+        "properties": {
+          "slug": {
+            "type": "string",
+            "title": "Slug",
+            "description": "Identificador del enlace para compartir"
+          },
+          "titulo": {
+            "type": "string",
+            "title": "Titulo"
+          },
+          "creado_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creado En"
+          },
+          "problema": {
+            "$ref": "#/components/schemas/Problema"
+          },
+          "solucion": {
+            "$ref": "#/components/schemas/RespuestaResolver"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug",
+          "titulo",
+          "creado_en",
+          "problema",
+          "solucion"
+        ],
+        "title": "ProblemaGuardado"
+      },
+      "RazonFila": {
+        "properties": {
+          "fila": {
+            "type": "string",
+            "title": "Fila"
+          },
+          "participa": {
+            "type": "boolean",
+            "title": "Participa"
+          },
+          "calculo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calculo",
+            "examples": [
+              "500 ÷ 20"
+            ]
+          },
+          "resultado": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+                "examples": [
+                  "3/4",
+                  "-2",
+                  "0.5"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resultado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo",
+            "examples": [
+              "división entre 0: no se considera"
+            ]
+          },
+          "menor": {
+            "type": "boolean",
+            "title": "Menor",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "fila",
+          "participa"
+        ],
+        "title": "RazonFila",
+        "description": "Una línea de la prueba de razón mínima."
+      },
+      "Resaltado": {
+        "properties": {
+          "columnas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Columnas"
+          },
+          "filas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Filas"
+          },
+          "celdas": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Celdas",
+            "description": "Pares (fila, columna), por ejemplo el pivote"
+          }
+        },
+        "type": "object",
+        "title": "Resaltado",
+        "description": "Qué partes de la tabla se destacan en el paso."
+      },
+      "RespuestaResolver": {
+        "properties": {
+          "version_formato": {
+            "type": "integer",
+            "const": 1,
+            "title": "Version Formato",
+            "default": 1
+          },
+          "problema": {
+            "$ref": "#/components/schemas/Problema"
+          },
+          "clasificacion": {
+            "$ref": "#/components/schemas/Clasificacion"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/Estado"
+          },
+          "pasos": {
+            "items": {
+              "$ref": "#/components/schemas/Paso"
+            },
+            "type": "array",
+            "title": "Pasos"
+          },
+          "resultado": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultadoFinal"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Vacío si el problema es infactible o no acotado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "problema",
+          "clasificacion",
+          "estado",
+          "pasos"
+        ],
+        "title": "RespuestaResolver",
+        "description": "Desarrollo completo de un problema: todos los pasos y el resultado."
+      },
+      "Restriccion": {
+        "properties": {
+          "coeficientes": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Coeficientes"
+          },
+          "signo": {
+            "type": "string",
+            "enum": [
+              "<=",
+              ">=",
+              "="
+            ],
+            "title": "Signo"
+          },
+          "lado_derecho": {
+            "type": "string",
+            "title": "Lado Derecho",
+            "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+            "examples": [
+              "3/4",
+              "-2",
+              "0.5"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "coeficientes",
+          "signo",
+          "lado_derecho"
+        ],
+        "title": "Restriccion"
+      },
+      "ResultadoFinal": {
+        "properties": {
+          "variables": {
+            "additionalProperties": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "object",
+            "title": "Variables",
+            "description": "Variables de decisión: x1, x2…"
+          },
+          "holguras": {
+            "additionalProperties": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "object",
+            "title": "Holguras",
+            "description": "Holguras y excesos; sin artificiales"
+          },
+          "z": {
+            "type": "string",
+            "title": "Z",
+            "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+            "examples": [
+              "3/4",
+              "-2",
+              "0.5"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "variables",
+          "holguras",
+          "z"
+        ],
+        "title": "ResultadoFinal"
+      },
+      "TablaSimplex": {
+        "properties": {
+          "columnas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Columnas",
+            "description": "Variables en orden: x1, x2, S1, S2, A1…"
+          },
+          "cj": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "title": "Cj",
+            "description": "Coeficiente de cada columna en el objetivo de la fase"
+          },
+          "base": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Base",
+            "description": "Variable básica de cada fila"
+          },
+          "cb": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "title": "Cb",
+            "description": "Cj de la variable básica de cada fila"
+          },
+          "b": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "title": "B",
+            "description": "Lado derecho de cada fila"
+          },
+          "matriz": {
+            "items": {
+              "items": {
+                "type": "string",
+                "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+                "examples": [
+                  "3/4",
+                  "-2",
+                  "0.5"
+                ]
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Matriz",
+            "description": "Coeficientes: una lista por fila"
+          },
+          "nombre_objetivo": {
+            "type": "string",
+            "enum": [
+              "Z",
+              "W"
+            ],
+            "title": "Nombre Objetivo",
+            "description": "W en Fase 1, Z en Fase 2"
+          },
+          "fila_z": {
+            "items": {
+              "type": "string",
+              "description": "Número exacto: entero, decimal o fracción. Vacío equivale a 0.",
+              "examples": [
+                "3/4",
+                "-2",
+                "0.5"
+              ]
+            },
+            "type": "array",
+            "title": "Fila Z",
+            "description": "Zj − Cj de cada columna"
+          },
+          "valor_z": {
+            "type": "string",
+            "title": "Valor Z",
+            "description": "Valor actual de Z o W",
+            "examples": [
+              "3/4",
+              "-2",
+              "0.5"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "columnas",
+          "cj",
+          "base",
+          "cb",
+          "b",
+          "matriz",
+          "nombre_objetivo",
+          "fila_z",
+          "valor_z"
+        ],
+        "title": "TablaSimplex",
+        "description": "Estado de la tabla simplex en un momento del desarrollo."
+      },
+      "TipoPaso": {
+        "type": "string",
+        "enum": [
+          "modelo_original",
+          "clasificacion",
+          "forma_extendida",
+          "tabla_inicial",
+          "fila_z_inicial",
+          "anular_basica_en_z",
+          "prueba_optimalidad",
+          "variable_entra",
+          "prueba_razon",
+          "variable_sale",
+          "fila_pivote",
+          "operacion_fila",
+          "fila_sin_cambio",
+          "operacion_fila_z",
+          "comprobacion_zj",
+          "solucion_actual",
+          "fin_fase_1",
+          "inicio_fase_2",
+          "lectura_resultado",
+          "caso_especial"
+        ],
+        "title": "TipoPaso",
+        "description": "Cada operación que el modo paso a paso muestra por separado."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
