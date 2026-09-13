@@ -1,0 +1,15 @@
+{
+  "formato": "simplex-paso-a-paso",
+  "version_formato": 1,
+  "titulo": "Simplex normal",
+  "descripcion": "Maximizar con solo restricciones ≤. Resultado: x1 = 2, x2 = 6, Z = 36.",
+  "problema": {
+    "objetivo": "max",
+    "coef_objetivo": ["3", "5"],
+    "restricciones": [
+      { "coeficientes": ["1", ""], "signo": "<=", "lado_derecho": "4" },
+      { "coeficientes": ["", "2"], "signo": "<=", "lado_derecho": "12" },
+      { "coeficientes": ["3", "2"], "signo": "<=", "lado_derecho": "18" }
+    ]
+  }
+}

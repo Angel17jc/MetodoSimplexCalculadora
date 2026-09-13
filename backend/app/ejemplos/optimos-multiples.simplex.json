@@ -1,0 +1,14 @@
+{
+  "formato": "simplex-paso-a-paso",
+  "version_formato": 1,
+  "titulo": "Óptimos múltiples",
+  "descripcion": "La función objetivo es paralela a una restricción: hay varias soluciones con Z = 10.",
+  "problema": {
+    "objetivo": "max",
+    "coef_objetivo": ["2", "4"],
+    "restricciones": [
+      { "coeficientes": ["1", "2"], "signo": "<=", "lado_derecho": "5" },
+      { "coeficientes": ["1", "1"], "signo": "<=", "lado_derecho": "4" }
+    ]
+  }
+}

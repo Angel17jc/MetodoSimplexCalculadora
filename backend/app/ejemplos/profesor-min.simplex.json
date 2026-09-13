@@ -1,0 +1,15 @@
+{
+  "formato": "simplex-paso-a-paso",
+  "version_formato": 1,
+  "titulo": "Ejemplo del profesor (minimizar)",
+  "descripcion": "Mismos datos que el ejemplo del profesor, minimizando. Resultado: x1 = 50/3, x2 = 25/2, Z = 2125/6.",
+  "problema": {
+    "objetivo": "min",
+    "coef_objetivo": ["10", "15"],
+    "restricciones": [
+      { "coeficientes": ["1", ""], "signo": "<=", "lado_derecho": "400" },
+      { "coeficientes": ["15", "20"], "signo": ">=", "lado_derecho": "500" },
+      { "coeficientes": ["", "8"], "signo": "=", "lado_derecho": "100" }
+    ]
+  }
+}

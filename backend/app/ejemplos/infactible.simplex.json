@@ -1,0 +1,14 @@
+{
+  "formato": "simplex-paso-a-paso",
+  "version_formato": 1,
+  "titulo": "Problema infactible",
+  "descripcion": "Las restricciones se contradicen: la Fase 1 termina con W distinto de 0.",
+  "problema": {
+    "objetivo": "max",
+    "coef_objetivo": ["1", "1"],
+    "restricciones": [
+      { "coeficientes": ["1", "1"], "signo": "<=", "lado_derecho": "2" },
+      { "coeficientes": ["1", "1"], "signo": ">=", "lado_derecho": "4" }
+    ]
+  }
+}

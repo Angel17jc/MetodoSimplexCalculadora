@@ -1,0 +1,15 @@
+{
+  "formato": "simplex-paso-a-paso",
+  "version_formato": 1,
+  "titulo": "Dos Fases al minimizar",
+  "descripcion": "Minimizar con restricciones =, ≥ y ≤. Resultado: x1 = 2/5, x2 = 9/5, Z = 17/5.",
+  "problema": {
+    "objetivo": "min",
+    "coef_objetivo": ["4", "1"],
+    "restricciones": [
+      { "coeficientes": ["3", "1"], "signo": "=", "lado_derecho": "3" },
+      { "coeficientes": ["4", "3"], "signo": ">=", "lado_derecho": "6" },
+      { "coeficientes": ["1", "2"], "signo": "<=", "lado_derecho": "4" }
+    ]
+  }
+}
