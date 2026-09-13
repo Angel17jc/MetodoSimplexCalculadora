@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1 import exportacion, problemas, resolver, sistema
+from app.api.v1 import ejemplos, exportacion, problemas, resolver, sistema
 from app.core.config import obtener_configuracion
 
 configuracion = obtener_configuracion()
@@ -23,3 +23,4 @@ app.include_router(sistema.router, prefix="/api/v1")
 app.include_router(resolver.router, prefix="/api/v1")
 app.include_router(exportacion.router, prefix="/api/v1")
 app.include_router(problemas.router, prefix="/api/v1")
+app.include_router(ejemplos.router, prefix="/api/v1")
