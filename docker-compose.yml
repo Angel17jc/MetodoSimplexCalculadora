@@ -1,0 +1,68 @@
+# Desarrollo: docker compose up
+# Web: http://localhost:5173 · API: http://localhost:8000/docs
+name: simplex
+
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      API_PROXY_TARGET: http://api:8000
+      # Detecta cambios en Windows y macOS a través del volumen
+      VITE_USE_POLLING: "true"
+    ports:
+      - "${WEB_PORT:-5173}:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+    depends_on:
+      - api
+
+  api:
+    build: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://simplex:simplex@db:5432/simplex}
+      CORS_ORIGENES: '["http://localhost:${WEB_PORT:-5173}"]'
+      WATCHFILES_FORCE_POLLING: "true"
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/alembic:/app/alembic
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+
+  migraciones:
+    build: ./backend
+    command: alembic upgrade head
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://simplex:simplex@db:5432/simplex}
+    volumes:
+      - ./backend/alembic:/app/alembic
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-simplex}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-simplex}
+      POSTGRES_DB: ${POSTGRES_DB:-simplex}
+    volumes:
+      - datos_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  datos_db:
