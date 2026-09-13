@@ -827,7 +827,7 @@ Cada sprint dura 1–2 semanas según el calendario del curso.
 
 | Sprint | Backend | Frontend | Listo cuando |
 |---|---|---|---|
-| **0 · Base** | Repo, Docker, CI, esquemas Pydantic, tipos de paso, contrato OpenAPI, `docs/despliegue.md`. Meter el ejemplo del profesor en la referencia y guardar sus tablas. | Wireframes del modo paso a paso; proyecto Vite + Tailwind + shadcn | `docker compose up` levanta todo; `/docs` muestra el contrato |
+| **0 · Base** | Repo, Docker, CI, esquemas Pydantic, tipos de paso, contrato OpenAPI, `docs/despliegue.md`. Meter el ejemplo del profesor en la referencia y guardar sus tablas. | Wireframes del modo paso a paso; proyecto Vite + Tailwind + shadcn | `docker compose up` levanta todo; `/docs` muestra el contrato. ✅ **Completado el 2026-09-13** |
 | **1 · Simplex normal** | Fracciones, forma extendida, operaciones de fila, reglas Max/Min, explicador | Asistente 3 pasos; `TablaSimplex`; `PanelOperacion` | Caso 3 se ve operación por operación |
 | **2 · Dos Fases** | Fase 1 (W = −ΣA), transición, Fase 2, casos especiales, empates | `ControlesPaso`, acordeón, reproducción automática | Casos 1–12 pasan; el ejemplo del profesor coincide con la referencia |
 | **3 · Exportar e importar** | JSON, `/importar`, PDF con ReportLab; BD y enlaces | Botones exportar/importar, historial local, ejemplos | Caso 13 pasa; PDF revisado por el profesor |
@@ -973,6 +973,16 @@ A partir de aquí: se crea `develop` y desde ella `feature/sprint-0-base`.
 | 60 | `docs: marcar Sprint 0 como completado` |
 
 **Tarea manual del equipo:** meter el ejemplo del profesor (Max y Min) en la calculadora de referencia, copiar sus tablas y agregarlas con `test(backend): agregar tablas de referencia del ejemplo del profesor`.
+
+**Notas de la ejecución del Sprint 0 (2026-09-13)**
+
+- **Commit 3:** el plan ya estaba en GitHub, así que el commit fue `docs: agregar flujo de Git y plan de commits al plan`.
+- **Commit extra** después del 48: `fix(frontend): importar vite.config con extensión en Vitest`, para evitar un aviso de Vite.
+- **Commit 56:** se hizo como un flujo aparte, `.github/workflows/contrato.yml`, que comprueba que `openapi.json` y los tipos TypeScript estén al día.
+- **Tipos de la API:** `openapi-typescript` 7.13 solo acepta TypeScript 5 y el proyecto usa TypeScript 6. Se ejecuta con `npx` en versión fija desde `npm run generar:tipos`, sin agregarlo a las dependencias.
+- **Lint del frontend:** la plantilla actual de Vite trae **oxlint** en lugar de ESLint; se mantuvo.
+- **Versiones instaladas:** React 19.2, Vite 8.3, TypeScript 6.0, Tailwind 4.3, Vitest 5.0, FastAPI 0.141, Pydantic 2.13, SQLAlchemy 2.0, Alembic 1.20.
+- **Verificado:** `docker compose up` levanta web + api + db + migraciones; `docker-compose.prod.yml` sirve el frontend con Nginx y funciona sin base de datos.
 
 #### Sprint 1 · Simplex normal
 
