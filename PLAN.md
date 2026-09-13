@@ -833,6 +833,301 @@ Cada sprint dura 1–2 semanas según el calendario del curso.
 | **3 · Exportar e importar** | JSON, `/importar`, PDF con ReportLab; BD y enlaces | Botones exportar/importar, historial local, ejemplos | Caso 13 pasa; PDF revisado por el profesor |
 | **4 · Entrega** | Pruebas de rendimiento; despliegue en hosting de la facultad | Accesibilidad, móvil, Playwright | Funciona en el servidor de la facultad; manual y demo |
 
+### Flujo de trabajo con Git
+
+**Regla del equipo:** cada cambio, por mínimo que sea, va en **su propio commit**. Un commit hace una sola cosa y el proyecto debe seguir funcionando después de cada uno.
+
+**Ramas**
+
+| Rama | Uso |
+|---|---|
+| `main` | Versión estable. Solo recibe merges de `develop` al terminar un sprint. |
+| `develop` | Integración de lo terminado. |
+| `feature/sprint-N-tema` | Trabajo diario. Se crea desde `develop` y vuelve a `develop` con Pull Request. |
+
+**Formato del mensaje** ([Conventional Commits](https://www.conventionalcommits.org/es/v1.0.0/), en español, en imperativo y sin punto final)
+
+```
+tipo(ámbito): descripción corta
+```
+
+| Tipo | Cuándo |
+|---|---|
+| `feat` | Funcionalidad nueva |
+| `fix` | Corrección de un error |
+| `test` | Pruebas nuevas o corregidas |
+| `docs` | Solo documentación |
+| `build` | Dependencias, Docker, configuración de compilación |
+| `ci` | GitHub Actions |
+| `chore` | Mantenimiento que no cambia la funcionalidad |
+| `refactor` | Cambio interno sin cambiar el comportamiento |
+| `perf` | Mejora de rendimiento |
+| `style` | Formato (espacios, comas) sin cambiar código |
+
+Ámbitos: `backend`, `frontend`, `simplex`, `explicador`, `exportacion`, `api`, `db`. Sin ámbito cuando afecta a todo el repo.
+
+### Plan de commits
+
+#### Sprint 0 · Base
+
+**A. Repositorio** (rama `main`)
+
+| # | Commit |
+|---|---|
+| 1 | `chore: inicializar repositorio con .gitignore` |
+| 2 | `chore: agregar .gitattributes y .editorconfig` |
+| 3 | `docs: agregar flujo de Git y plan de commits al plan` (el plan ya estaba en el repositorio) |
+| 4 | `docs: agregar guía de contribución con convención de commits` |
+| 5 | `docs: agregar README inicial` |
+
+A partir de aquí: se crea `develop` y desde ella `feature/sprint-0-base`.
+
+**B. Backend base**
+
+| # | Commit |
+|---|---|
+| 6 | `build(backend): crear pyproject.toml con dependencias base` |
+| 7 | `feat(backend): crear aplicación FastAPI con endpoint /health` |
+| 8 | `feat(backend): agregar configuración por variables de entorno` |
+| 9 | `feat(backend): habilitar CORS para el frontend` |
+| 10 | `test(backend): probar endpoint /health` |
+| 11 | `chore(backend): configurar Ruff y mypy` |
+
+**C. Contrato de la API**
+
+| # | Commit |
+|---|---|
+| 12 | `feat(backend): agregar tipo Fraccion para coeficientes` |
+| 13 | `test(backend): probar conversión de Fraccion` |
+| 14 | `feat(backend): agregar esquema Problema con límites 20 × 50` |
+| 15 | `test(backend): probar validaciones del esquema Problema` |
+| 16 | `feat(backend): agregar esquema de tabla simplex` |
+| 17 | `feat(backend): agregar tipos de paso del modo paso a paso` |
+| 18 | `feat(backend): agregar esquema de respuesta de /resolver` |
+| 19 | `feat(backend): agregar esquema del archivo .simplex.json` |
+| 20 | `feat(backend): agregar endpoint POST /resolver pendiente de motor` |
+| 21 | `feat(backend): agregar endpoints de importar y exportar PDF pendientes` |
+| 22 | `feat(backend): agregar endpoints de problemas pendientes` |
+| 23 | `feat(backend): agregar ejemplos precargados en JSON` |
+| 24 | `feat(backend): agregar endpoint GET /ejemplos` |
+| 25 | `test(backend): probar endpoint de ejemplos` |
+| 26 | `test(backend): probar que el contrato OpenAPI tenga todas las rutas` |
+| 27 | `feat(backend): agregar script para exportar el contrato OpenAPI` |
+| 28 | `docs(backend): agregar contrato openapi.json generado` |
+
+**D. Base de datos opcional**
+
+| # | Commit |
+|---|---|
+| 29 | `build(backend): agregar dependencias opcionales de base de datos` |
+| 30 | `feat(backend): agregar sesión de BD opcional según DATABASE_URL` |
+| 31 | `feat(backend): agregar modelos de problemas, restricciones y soluciones` |
+| 32 | `build(backend): inicializar Alembic` |
+| 33 | `feat(backend): agregar migración inicial` |
+
+**E. Frontend base**
+
+| # | Commit |
+|---|---|
+| 34 | `build(frontend): crear proyecto Vite con React y TypeScript` |
+| 35 | `chore(frontend): limpiar plantilla inicial de Vite` |
+| 36 | `build(frontend): configurar Tailwind CSS` |
+| 37 | `build(frontend): configurar alias @ para imports` |
+| 38 | `build(frontend): inicializar shadcn/ui` |
+| 39 | `build(frontend): agregar React Router` |
+| 40 | `feat(frontend): agregar layout con navegación` |
+| 41 | `feat(frontend): agregar páginas Calculadora, Solución, Historial y Ejemplos` |
+| 42 | `build(frontend): agregar TanStack Query, Zustand, React Hook Form y Zod` |
+| 43 | `build(frontend): generar tipos desde el contrato OpenAPI` |
+| 44 | `feat(frontend): agregar cliente de API` |
+| 45 | `feat(frontend): mostrar estado de la API en el pie de página` |
+| 46 | `test(frontend): configurar Vitest y Testing Library` |
+| 47 | `test(frontend): probar navegación del layout` |
+
+**F. Docker**
+
+| # | Commit |
+|---|---|
+| 48 | `build(backend): agregar Dockerfile del backend` |
+| 49 | `build(frontend): agregar Dockerfile de desarrollo del frontend` |
+| 50 | `build: agregar docker-compose.yml con web, api y db` |
+| 51 | `build: agregar .env.example` |
+| 52 | `build(frontend): agregar Dockerfile de producción con Nginx` |
+| 53 | `build: agregar docker-compose.prod.yml` |
+
+**G. Integración continua**
+
+| # | Commit |
+|---|---|
+| 54 | `ci: agregar flujo de backend con Ruff, mypy y pytest` |
+| 55 | `ci: agregar flujo de frontend con lint, pruebas y build` |
+| 56 | `ci: verificar que el contrato OpenAPI esté actualizado` |
+
+**H. Documentación**
+
+| # | Commit |
+|---|---|
+| 57 | `docs: agregar wireframes del modo paso a paso` |
+| 58 | `docs: agregar guía de despliegue` |
+| 59 | `docs: actualizar README con instrucciones de desarrollo` |
+| 60 | `docs: marcar Sprint 0 como completado` |
+
+**Tarea manual del equipo:** meter el ejemplo del profesor (Max y Min) en la calculadora de referencia, copiar sus tablas y agregarlas con `test(backend): agregar tablas de referencia del ejemplo del profesor`.
+
+#### Sprint 1 · Simplex normal
+
+Rama `feature/sprint-1-simplex-normal`.
+
+**Motor**
+
+| Commit |
+|---|
+| `feat(simplex): agregar formateo de fracciones para mostrar` |
+| `feat(simplex): agregar modelo inmutable de tabla simplex` |
+| `test(simplex): probar creación y copia de la tabla` |
+| `feat(simplex): normalizar restricciones con lado derecho negativo` |
+| `test(simplex): probar normalización de lado derecho negativo` |
+| `feat(simplex): clasificar problema como simplex normal o extendido` |
+| `test(simplex): probar clasificación del problema` |
+| `feat(simplex): construir forma extendida con holguras` |
+| `test(simplex): probar forma extendida con holguras` |
+| `feat(simplex): construir tabla inicial con Cj, Cb y base` |
+| `feat(simplex): calcular fila Z inicial como 0 − Z` |
+| `test(simplex): probar tabla inicial y fila Z` |
+| `feat(simplex): agregar prueba de optimalidad para maximizar y minimizar` |
+| `test(simplex): probar prueba de optimalidad` |
+| `feat(simplex): elegir variable que entra con desempate por posición` |
+| `test(simplex): probar elección de variable que entra` |
+| `feat(simplex): agregar prueba de razón mínima excluyendo ceros y negativos` |
+| `test(simplex): probar prueba de razón mínima` |
+| `feat(simplex): detectar problema no acotado` |
+| `feat(simplex): agregar operación de fila pivote (1/pivote)·R` |
+| `feat(simplex): agregar operación de fila (−v)·Rp' + Ri` |
+| `feat(simplex): actualizar fila Z con operación de fila` |
+| `test(simplex): probar operaciones de Gauss-Jordan` |
+| `feat(simplex): agregar comprobación Zj − Cj con Cb` |
+| `feat(simplex): registrar pasos de cada iteración` |
+| `feat(simplex): iterar hasta el óptimo en simplex normal` |
+| `feat(simplex): leer resultado desde la matriz identidad` |
+| `feat(simplex): detectar óptimos múltiples` |
+| `test(simplex): comparar casos 3, 5, 7 y 8 con SciPy` |
+| `feat(explicador): agregar textos de los pasos del simplex normal` |
+| `test(explicador): probar textos de los pasos` |
+| `feat(api): conectar POST /resolver con el motor` |
+| `test(api): resolver caso 3 de punta a punta` |
+
+**Frontend**
+
+| Commit |
+|---|
+| `feat(frontend): agregar componente CampoFraccion` |
+| `test(frontend): probar CampoFraccion` |
+| `feat(frontend): agregar paso 1 con tamaño del modelo` |
+| `feat(frontend): agregar paso 2 con objetivo` |
+| `feat(frontend): agregar paso 3 con función objetivo` |
+| `feat(frontend): agregar restricciones con signo y lado derecho` |
+| `feat(frontend): agregar línea de no negatividad y botones Resolver y Limpiar` |
+| `feat(frontend): validar el modelo con Zod` |
+| `feat(frontend): guardar el modelo en Zustand` |
+| `feat(frontend): enviar el modelo a /resolver` |
+| `feat(frontend): agregar componente TablaSimplex` |
+| `feat(frontend): resaltar columna, fila y pivote` |
+| `feat(frontend): agregar PanelOperacion con KaTeX` |
+| `feat(frontend): mostrar todos los pasos en la vista Solución` |
+| `test(frontend): resolver caso 3 desde la interfaz con Playwright` |
+
+#### Sprint 2 · Dos Fases
+
+Rama `feature/sprint-2-dos-fases`.
+
+**Motor**
+
+| Commit |
+|---|
+| `feat(simplex): agregar excesos y artificiales en la forma extendida` |
+| `test(simplex): probar forma extendida con ≥ y =` |
+| `feat(simplex): construir Fase 1 con Max W = −ΣA` |
+| `feat(simplex): preparar fila W anulando artificiales básicas` |
+| `test(simplex): probar tabla inicial de Fase 1 del ejemplo del profesor` |
+| `feat(simplex): detectar infactibilidad al final de la Fase 1` |
+| `feat(simplex): sacar artificiales básicas con valor cero` |
+| `feat(simplex): eliminar restricciones redundantes` |
+| `feat(simplex): eliminar columnas artificiales al pasar a Fase 2` |
+| `feat(simplex): preparar fila Z de Fase 2 con Cj originales` |
+| `feat(simplex): avisar minimización sin variables artificiales` |
+| `feat(simplex): avisar empates y alternativas` |
+| `feat(simplex): avisar solución degenerada` |
+| `feat(simplex): detectar ciclos y cambiar a regla de Bland` |
+| `test(simplex): comparar ejemplo del profesor Max con la referencia` |
+| `test(simplex): probar ejemplo del profesor Min y variante 2b` |
+| `test(simplex): probar casos 4, 6, 9, 10, 11 y 12` |
+| `test(simplex): medir rendimiento con 5 × 5 y 20 × 50` |
+| `feat(explicador): agregar textos de Fase 1, transición y casos especiales` |
+
+**Frontend**
+
+| Commit |
+|---|
+| `feat(frontend): guardar el puntero del paso a paso en Zustand` |
+| `feat(frontend): agregar controles inicio, anterior y siguiente` |
+| `feat(frontend): saltar a la siguiente iteración` |
+| `feat(frontend): agregar reproducción automática con velocidad` |
+| `feat(frontend): agregar atajos de teclado ← y →` |
+| `feat(frontend): agregar registro en cascada de la iteración` |
+| `feat(frontend): plegar iteraciones anteriores en acordeón` |
+| `feat(frontend): agregar pestañas Fase 1 y Fase 2` |
+| `feat(frontend): agregar resumen de la solución` |
+| `feat(frontend): animar celdas que cambian con Motion` |
+| `feat(frontend): agregar botón Ver decimales` |
+| `feat(frontend): avisar variable artificial al elegir ≥ o =` |
+| `test(frontend): recorrer el ejemplo del profesor paso a paso con Playwright` |
+
+#### Sprint 3 · Exportar e importar
+
+Rama `feature/sprint-3-exportar-importar`.
+
+| Commit |
+|---|
+| `feat(exportacion): serializar la solución a .simplex.json` |
+| `feat(api): agregar POST /importar que valida y vuelve a resolver` |
+| `test(api): probar importación válida e inválida` |
+| `feat(exportacion): generar encabezado y modelo del PDF` |
+| `feat(exportacion): dibujar tablas con pivote marcado en el PDF` |
+| `feat(exportacion): escribir las operaciones de cada paso en el PDF` |
+| `feat(exportacion): usar página horizontal para tablas anchas` |
+| `feat(api): conectar POST /exportar/pdf` |
+| `test(exportacion): verificar que el PDF tenga todos los pasos` |
+| `feat(db): agregar repositorio de problemas` |
+| `feat(api): conectar POST /problemas y GET /problemas/{slug}` |
+| `test(api): probar guardar y abrir problema por enlace` |
+| `feat(frontend): agregar botón Exportar JSON` |
+| `feat(frontend): agregar Importar JSON` |
+| `feat(frontend): agregar botón Exportar PDF` |
+| `feat(frontend): guardar historial en el navegador` |
+| `feat(frontend): agregar página Ejemplos` |
+| `feat(frontend): agregar Compartir enlace cuando hay BD` |
+| `feat(frontend): agregar vista de impresión` |
+| `test(frontend): exportar e importar con Playwright` |
+
+#### Sprint 4 · Entrega
+
+Rama `feature/sprint-4-entrega`.
+
+| Commit |
+|---|
+| `feat(frontend): adaptar formulario a móvil` |
+| `feat(frontend): adaptar paso a paso a móvil` |
+| `fix(frontend): mejorar etiquetas, foco y contraste` |
+| `test(frontend): probar flujo completo en móvil con Playwright` |
+| `perf(simplex): reducir tamaño de respuesta para 20 × 50` |
+| `docs: agregar manual de usuario` |
+| `docs: agregar guion de demo` |
+| `build: ajustar docker-compose.prod.yml al servidor de la facultad` |
+| `docs: registrar datos del despliegue en la facultad` |
+| `chore(release): publicar versión 1.0.0` |
+
+Los Sprints 1–4 pueden ganar commits al empezar cada uno; la regla es la misma: un cambio, un commit.
+
 ---
 
 ## 19. Decisiones sobre las preguntas pendientes
