@@ -1,0 +1,48 @@
+name: Contrato de la API
+
+# Falla si alguien cambia la API sin regenerar openapi.json o los tipos TypeScript.
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+      - "frontend/src/lib/api/**"
+      - "frontend/package.json"
+      - ".github/workflows/contrato.yml"
+  pull_request:
+    paths:
+      - "backend/**"
+      - "frontend/src/lib/api/**"
+      - "frontend/package.json"
+      - ".github/workflows/contrato.yml"
+
+jobs:
+  sincronizado:
+    name: openapi.json y tipos TypeScript al día
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+
+      - name: Instalar backend
+        working-directory: backend
+        run: pip install -e .
+
+      - name: Verificar openapi.json
+        working-directory: backend
+        run: python -m app.scripts.exportar_openapi --verificar
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Verificar tipos TypeScript
+        working-directory: frontend
+        run: |
+          npm run generar:tipos
+          git diff --exit-code -- src/lib/api/esquema.d.ts
