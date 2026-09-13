@@ -17,5 +17,9 @@ export default defineConfig({
       // En Docker API_PROXY_TARGET es http://api:8000
       '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:8000',
     },
+    watch: {
+      // Los volúmenes de Docker en Windows y macOS no avisan los cambios: se revisan por sondeo.
+      usePolling: process.env.VITE_USE_POLLING === 'true',
+    },
   },
 })
