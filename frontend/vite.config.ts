@@ -12,4 +12,10 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      // En Docker API_PROXY_TARGET es http://api:8000
+      '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:8000',
+    },
+  },
 })
