@@ -73,6 +73,16 @@ npm run test
 npm run build
 ```
 
+## Registro de avance
+
+Cada vez que subas trabajo a `develop` o `main`, actualiza [docs/avance.md](docs/avance.md): marca los pasos terminados con tu usuario y el hash del commit, el siguiente paso y una línea en el historial. Va en su propio commit:
+
+```
+docs: actualizar registro de avance
+```
+
+Así el equipo sabe siempre hasta dónde se llegó sin tener que revisar el historial de Git.
+
 ## Pull Requests
 
 - Título con el mismo formato que un commit.
