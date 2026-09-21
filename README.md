@@ -9,10 +9,12 @@ Calculadora web del **método simplex** (simplex normal y **Dos Fases**) para **
 | Sprint | Estado |
 |---|---|
 | 0 · Base | ✅ Completado |
-| 1 · Simplex normal | ⏳ Siguiente |
+| 1 · Simplex normal | 🔄 En progreso |
 | 2 · Dos Fases | Pendiente |
 | 3 · Exportar e importar | Pendiente |
 | 4 · Entrega | Pendiente |
+
+El detalle de qué está hecho, quién lo hizo y cuál es el siguiente paso está en **[docs/avance.md](docs/avance.md)**.
 
 ## Tecnologías
 
